@@ -134,4 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Usamos location.href para una mejor experiencia en dispositivos móviles
         window.location.href = whatsappUrl;
     });
+
+    // --- Manejo del Preloader ---
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.classList.add('hidden');
+            document.body.classList.remove('loading');
+        }
+    });
 });
