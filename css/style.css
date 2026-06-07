@@ -61,16 +61,22 @@ h1, h2, h3, .brand-mark {
   filter: blur(40px);
 }
 
-.preloader-logo {
-  width: 120px;
-  height: 120px;
+.preloader-logo-wrapper {
+  display: grid;
+  place-items: center;
   filter: drop-shadow(0 0 20px rgba(201, 255, 113, 0.4));
-  animation: pulse 1.5s ease-in-out infinite, glitch 3s infinite;
+  animation: pulse 1.5s ease-in-out infinite;
   transition: transform 0.8s ease;
 }
 
-#preloader.hidden .preloader-logo {
+#preloader.hidden .preloader-logo-wrapper {
   transform: rotate(25deg) scale(0.5);
+}
+
+.preloader-logo {
+  width: 120px;
+  height: 120px;
+  animation: glitch 3s infinite;
 }
 
 @keyframes pulse {
@@ -261,10 +267,7 @@ body.loading { overflow: hidden; }
   letter-spacing: -0.06em;
   max-width: 10ch;
 }
-.hero h1:hover {
-  animation: glitch 0.4s infinite;
-  cursor: crosshair;
-}
+
 .hero h1 span { display: block; color: var(--green); }
 .hero .subtitle {
   max-width: 56ch;
