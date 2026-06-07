@@ -1,0 +1,21 @@
+{
+  "name": "Mauro Rios | Portafolio",
+  "short_name": "Portafolio",
+  "icons": [
+    {
+      "src": "/assets\\img/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets\\img/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#efede3",
+  "background_color": "#171717",
+  "display": "standalone"
+}

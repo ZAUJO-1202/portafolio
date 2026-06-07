@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <title>Panel de Administración | Portafolio</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Mauro Rios | Portafolio" />
+    <link rel="manifest" href="assets/img/site.webmanifest" />
+    
+    <!-- Google Fonts: Josefin Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <style>
+        body { background-color: var(--bg); color: var(--text); }
+        .admin-header { background: var(--violet); color: #fff; padding: 20px 0; margin-bottom: 40px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 20px; }
+        #loginForm { max-width: 450px; margin: 80px auto; }
+        #adminContent { display: none; }
+        @media (max-width: 860px) { .admin-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin:0; font-size: 1.2rem;">✦ Panel de Control</h2>
+                <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.8rem;" onclick="firebase.auth().signOut()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Login -->
+        <div id="loginForm" class="contact-card">
+            <h3 style="margin-bottom: 20px;">Acceso Administrador</h3>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="adminEmail" placeholder="admin@correo.com">
+            </div>
+            <div class="field">
+                <label>Contraseña</label>
+                <input type="password" id="adminPass" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Entrar al Panel</button>
+        </div>
+
+        <!-- Panel -->
+        <div id="adminContent">
+            <div class="admin-grid">
+                <!-- Configuración General -->
+                <div class="contact-card">
+                    <h3>Visual del Hero</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sube una imagen PNG de tus modelos 3D para que aparezca en la página de inicio.</p>
+                    <div class="field">
+                        <input type="file" id="heroFile" accept="image/png">
+                    </div>
+                    <button class="btn btn-primary" onclick="uploadHero()">Actualizar Hero</button>
+                </div>
+
+                <!-- Nuevo Proyecto -->
+                <div class="contact-card">
+                    <h3>Nuevo Proyecto</h3>
+                    <div class="field"><label>Título</label><input type="text" id="pTitle" placeholder="Nombre del proyecto"></div>
+                    <div class="field"><label>Descripción</label><textarea id="pDesc" rows="3" placeholder="Breve descripción..."></textarea></div>
+                    <div class="field">
+                    <label>Categoría</label>
+                    <select id="pCat">
+                        <option value="3d">Modelado 3D</option>
+                        <option value="web">Desarrollo Web</option>
+                        <option value="motion">Motion Graphics</option>
+                    </select>
+                </div>
+                    <div class="field"><label>Etiquetas</label><input type="text" id="pTags" placeholder="GLB, Blender, UI (separar por comas)"></div>
+                    <div class="field"><label>Portada (Imagen)</label><input type="file" id="pThumb"></div>
+                    <div class="field"><label>Archivo 3D (Opcional .glb)</label><input type="file" id="pModel" accept=".glb"></div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="addProject()">Publicar Proyecto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXxGKVMkytpiyclCvuZv0I3BWigPS4haY",
+            authDomain: "proyectos-fb5f4.firebaseapp.com",
+            projectId: "proyectos-fb5f4",
+            storageBucket: "proyectos-fb5f4.appspot.com",
+            messagingSenderId: "767346559996",
+            appId: "1:767346559996:web:97341f80b654f1e015c079"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Configuración Cloudinary
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbzqbh5wv/auto/upload";
+        const CLOUDINARY_PRESET = "portafolio_preset";
+
+        // Función auxiliar para subir a Cloudinary
+        async function uploadToCloudinary(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_PRESET);
+
+            const response = await fetch(CLOUDINARY_URL, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Error al subir a Cloudinary');
+            
+            const data = await response.json();
+            return data.secure_url;
+        }
+
+        // Auth Listener
+        firebase.auth().onAuthStateChanged(user => {
+            document.getElementById('loginForm').style.display = user ? 'none' : 'block';
+            document.getElementById('adminContent').style.display = user ? 'block' : 'none';
+        });
+
+        async function login() {
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+            try { await firebase.auth().signInWithEmailAndPassword(email, pass); } 
+            catch (e) { alert("Error: " + e.message); }
+        }
+
+        async function uploadHero() {
+            const file = document.getElementById('heroFile').files[0];
+            const btn = document.querySelector('button[onclick="uploadHero()"]');
+            if (!file) { alert("Selecciona una imagen primero"); return; }
+            
+            btn.disabled = true;
+            btn.textContent = "Subiendo...";
+            
+            try {
+                const url = await uploadToCloudinary(file);
+                await db.collection('configuracion').doc('hero').set({ url });
+                alert("Hero actualizado con éxito");
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Actualizar Hero";
+            }
+        }
+
+        async function addProject() {
+            const thumbFile = document.getElementById('pThumb').files[0];
+            const modelFile = document.getElementById('pModel').files[0];
+            const btn = document.querySelector('button[onclick="addProject()"]');
+            
+            if (!thumbFile) { alert("La imagen de portada es obligatoria"); return; }
+
+            btn.disabled = true;
+            btn.textContent = "Publicando...";
+
+            try {
+                const portadaUrl = await uploadToCloudinary(thumbFile);
+                let archivoUrl = "";
+                
+                if (modelFile) {
+                    archivoUrl = await uploadToCloudinary(modelFile);
+                }
+
+                await db.collection('proyectos').add({
+                    titulo: document.getElementById('pTitle').value,
+                    descripcion: document.getElementById('pDesc').value,
+                    categoria: document.getElementById('pCat').value,
+                    portadaUrl,
+                    archivoUrl,
+                    fecha: firebase.firestore.FieldValue.serverTimestamp(),
+                    tags: document.getElementById('pTags').value.split(',').map(t => t.trim())
+                });
+                
+                alert("Proyecto añadido con éxito");
+                
+                // Limpiar campos
+                document.getElementById('pTitle').value = '';
+                document.getElementById('pDesc').value = '';
+                document.getElementById('pTags').value = '';
+                document.getElementById('pThumb').value = '';
+                document.getElementById('pModel').value = '';
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Publicar Proyecto";
+            }
+        }
+    </script>
+</body>
+</html>

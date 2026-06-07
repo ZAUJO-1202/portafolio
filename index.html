@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portafolio profesional de Mauro Rios, especialista en modelado 3D, diseño multimedia y desarrollo web frontend con HTML, CSS, JS, Firebase, Cloudinary, Docker y Nginx.">
+    <title>Mauro Rios | Modelado 3D, Diseño Multimedia y Desarrollo Web</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/img/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Mauro Rios | Portafolio" />
+    <link rel="manifest" href="assets/img/site.webmanifest" />
+
+    <!-- Metadatos Sociales (Open Graph) -->
+    <meta property="og:title" content="Mauro Rios | Modelado 3D y Desarrollo Web">
+    <meta property="og:description" content="Portafolio profesional con enfoque en modelado 3D, diseño multimedia y desarrollo web frontend con tecnologías modernas.">
+
+    <!-- Google Fonts: Josefin Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <!-- Estilos externos -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Scripts externos (defer para optimizar carga) -->
+    <script src="js/main.js" defer></script>
+
+    <!-- Soporte para Modelos 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
+    </head>
+    <body>
+
+    <header class="topbar">
+        <div class="container">
+        <nav class="nav" id="nav">
+            <a class="brand" href="#inicio" aria-label="Ir al inicio">
+            <img src="assets/img/logo.svg" alt="Logo Mauro Rios" class="brand-mark">
+            <span>Mauro Rios | Portafolio</span>
+            </a>
+
+            <div class="nav-links" aria-label="Navegación principal">
+            <a href="#inicio">Inicio</a>
+            <a href="#sobre-mi">Sobre mí</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#proyectos">Proyectos</a>
+            <a href="#contacto">Contacto</a>
+            </div>
+
+            <div class="nav-actions">
+            <form class="search" role="search" aria-label="Buscar proyectos">
+                <input type="search" id="searchInput" placeholder="Buscar proyectos, habilidades..." aria-label="Buscar proyectos, habilidades" />
+                <button type="submit" aria-label="Buscar">⌕</button>
+            </form>
+            <a class="btn btn-secondary" href="#proyectos">Ver trabajos</a>
+            <button class="hamburger" id="menuBtn" aria-label="Abrir menú">☰</button>
+            </div>
+        </nav>
+        </div>
+    </header>
+
+    <main id="contenido">
+        <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-panel">
+            <div class="hero-grid">
+                <div>
+                <div class="eyebrow">Diseño 3D, desarrollo web y soluciones visuales</div>
+                <h1>Transformo ideas en <span>experiencias</span></h1>
+                <p class="subtitle">
+                    Soy Mauro Rios, profesional en formación en Ingeniería Multimedia, especializado en modelado 3D, diseño gráfico digital y desarrollo web frontend. Trabajo con modelado lowpoly y tecnologías modernas para construir proyectos visuales funcionales y rápidos.
+                </p>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
+                    <a class="btn btn-secondary" href="#contacto">Contactarme</a>
+                </div>
+
+                <div class="stats" aria-label="Resumen profesional">
+                    <div class="stat"><strong>+10</strong><span>proyectos completados</span></div>
+                    <div class="stat"><strong>4</strong><span>años de experiencia</span></div>
+                    <div class="stat"><strong>6</strong><span>herramientas dominadas</span></div>
+                    <div class="stat"><strong>100%</strong><span>compromiso y creatividad</span></div>
+                </div>
+                </div>
+
+                <div class="visual" aria-hidden="true">
+                <div class="viz-stage">
+                    <div id="heroVisualContainer"></div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </section>
+
+        <section id="servicios">
+        <div class="container">
+            <div class="section-head">
+                <h2>Servicios</h2>
+                <p>Soluciones visuales y técnicas para destacar en el entorno digital.</p>
+            </div>
+
+            <div class="skills" id="skillsGrid">
+                <div class="skill">Modelado 3D<small>Optimización, limpieza topológica y estilo lowpoly para videojuegos y piezas digitales.</small></div>
+                <div class="skill">Diseño gráfico digital<small>Piezas vectoriales e ilustraciones con una identidad clara, coherente y profesional.</small></div>
+                <div class="skill">Desarrollo web frontend<small>Portafolios responsivos con HTML, CSS y JS, listos para GitHub Pages, Firebase y Cloudinary.</small></div>
+                <div class="skill">Optimización y despliegue<small>Estructura ordenada con Docker y Nginx para una experiencia web estable.</small></div>
+            </div>
+        </div>
+        </section>
+
+        <section id="habilidades" style="padding-top: 0;">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Habilidades</h2>
+                    <p>Combino creatividad, técnica y organización para construir proyectos visuales y digitales con alto valor estético y funcional.</p>
+                </div>
+                <div class="chips">
+                    <span class="project-tag">Modelado 3D</span>
+                    <span class="project-tag">Diseño lowpoly</span>
+                    <span class="project-tag">Diseño gráfico digital</span>
+                    <span class="project-tag">Ilustración vectorial</span>
+                    <span class="project-tag">Animación 3D básica</span>
+                    <span class="project-tag">HTML, CSS y JavaScript</span>
+                    <span class="project-tag">GitHub Pages</span>
+                    <span class="project-tag">Firebase</span>
+                    <span class="project-tag">Cloudinary</span>
+                    <span class="project-tag">Docker y Nginx</span>
+                    <span class="project-tag">Prompts para IA</span>
+                    <span class="project-tag">Resolución de problemas</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="proyectos">
+        <div class="container">
+            <div class="section-head">
+            <div>
+                <h2>Proyectos destacados</h2>
+                <p>Incluye categorías listas para filtrar y una presentación ideal para mostrar modelados GLB, motion graphics, identidad visual y sitios web.</p>
+            </div>
+            </div>
+
+            <div class="chips" id="filters">
+            <button class="chip is-active" data-filter="all">Todos</button>
+            <button class="chip" data-filter="3d">Modelado 3D</button>
+            <button class="chip" data-filter="web">Diseño web</button>
+            <button class="chip" data-filter="motion">Motion graphics</button>
+            <button class="chip" data-filter="branding">Branding</button>
+            </div>
+
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Las tarjetas se cargarán dinámicamente desde Firebase -->
+            </div>
+        </div>
+        </section>
+
+        <section id="sobre-mi">
+        <div class="container">
+            <div class="section-head">
+            <div>
+                <h2>Sobre mí</h2>
+                <p>Aquí puedes observar un resumen de mi perfil profesional y descargar mi Hoja de Vida en formato PDF.</p>
+            </div>
+            </div>
+
+            <div class="about-grid">
+            <!--<div class="about-card">
+                <div class="about-photo">Espacio para tu foto profesional</div>
+            </div>-->
+            <div class="about-card about-copy">
+                <h3>Mauro Rios</h3>
+                <p>
+                    Soy un profesional en formación en Ingeniería Multimedia con experiencia en diseño gráfico vectorial, modelado 3D para videojuegos, animación e impresión. Mi fortaleza está en crear soluciones visuales limpias, funcionales y bien optimizadas, con especial interés en el modelado lowpoly y la construcción de portafolios web modernos.
+                </p>
+                <p>
+                    También integro conocimientos de desarrollo web frontend y herramientas como Docker, Nginx, GitHub Pages, Firebase y Cloudinary para crear proyectos escalables, organizados y fáciles de mantener. Me caracterizo por la adaptabilidad y la resolución de problemas.
+                </p>
+                <a class="btn btn-primary" href="assets/pdf/CVM_MauroRios_140126.pdf" download="CVM_MauroRios_140126.pdf">Descargar CV</a>
+            </div>
+            </div>
+        </div>
+        </section>
+
+        <section id="contacto">
+        <div class="container">
+            <div class="section-head">
+            <div>
+                <h2>¿Necesitas una pieza 3D o un portafolio visual que realmente destaque?</h2>
+                <p>Estoy listo para convertir tu idea en una propuesta visual atractiva, funcional y bien optimizada. Si buscas modelado 3D, diseño multimedia o una web personal con presencia profesional, aquí empieza el proyecto.</p>
+            </div>
+            </div>
+
+            <div class="contact-grid">
+            <div class="contact-card">
+                <h3>Hablemos de tu proyecto</h3>
+                <p>Envía tu nombre y un mensaje para iniciar una conversación directa vía WhatsApp.</p>
+                <p>[Más métodos de contacto proximamente...]</p>
+                <form id="contactForm">
+                <div class="field">
+                    <label for="name">Nombre</label>
+                    <input id="name" name="name" type="text" placeholder="Tu nombre" required />
+                </div>
+                <div class="field">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit" style="gap: 12px;">
+                    Enviar mensaje <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.009c.109.004.258-.045.406.314.156.38.533 1.297.581 1.393.048.097.08.21.016.339-.063.13-.099.21-.197.321-.097.111-.206.247-.294.331-.097.092-.198.192-.085.384.113.192.502.828 1.08 1.341.741.66 1.365.865 1.557.962.192.096.303.08.416-.048.113-.129.484-.564.614-.756.13-.191.259-.161.439-.097.18.064 1.13.534 1.325.631.194.097.325.145.372.225.047.08.047.465-.097.87zM12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+                </button>
+                </form>
+            </div>
+            </div>
+        </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+        <div class="footer-line"></div>
+        <div>Portafolio multimedia Mauro Rios · HTML, CSS y JS ·</div>
+        </div>
+    </footer>
+</body>
+</html>
