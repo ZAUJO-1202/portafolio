@@ -120,6 +120,7 @@ body.loading { overflow: hidden; }
   justify-content: space-between;
   gap: 18px;
   min-height: 78px;
+  padding: 0 10px;
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
