@@ -183,7 +183,7 @@
                     portadaUrl,
                     archivoUrl,
                     fecha: firebase.firestore.FieldValue.serverTimestamp(),
-                    tags: document.getElementById('pTags').value.split(',').map(t => t.trim())
+                    tags: document.getElementById('pTags').value.split(',').map(t => t.trim()).filter(t => t !== "")
                 });
                 
                 alert("Proyecto añadido con éxito");

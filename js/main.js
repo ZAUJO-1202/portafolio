@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${data.titulo}</h3>
                     <p>${data.descripcion}</p>
                     <div class="project-footer">
-                        ${(data.tags || []).map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        ${(data.tags || []).filter(tag => tag.trim() !== "").map(tag => `<span class="project-tag">${tag}</span>`).join('')}
                     </div>
                 </div>`;
             projectsGrid.appendChild(card);
