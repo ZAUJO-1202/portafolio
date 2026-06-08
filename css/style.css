@@ -74,8 +74,8 @@ h1, h2, h3, .brand-mark {
 }
 
 .preloader-logo {
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   animation: glitch 3s infinite;
 }
 
@@ -469,12 +469,11 @@ section { padding: 84px 0; }
 
 /* --- About & Skills --- */
 .about-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 22px; align-items: center; }
-.about-card { background: var(--bg); color: var(--text); border-radius: 28px; padding: 24px; box-shadow: var(--shadow-soft); border: 1px solid var(--border); }
+.about-card { background: var(--bg); color: var(--text); border-radius: 28px; padding: 24px; box-shadow: var(--shadow-soft); border: 1px solid var(--border); max-height: 400px;}
 .about-card h3 { color: var(--violet); }
 .about-card p { color: var(--muted); }
 .about-photo {
   border-radius: 14px;
-  max-height: 340px;
   aspect-ratio: 3 / 4; /* Espacios para mayor compatibilidad */
   background: linear-gradient(135deg, #262626, var(--green-soft));
   display: grid; place-items: center; color: #fff; font-weight: 700;
