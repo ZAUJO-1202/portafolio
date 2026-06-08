@@ -38,7 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <model-viewer src="${modelUrl}"
                 ar ar-modes="webxr scene-viewer quick-look"
                 camera-controls auto-rotate
-                shadow-intensity="1"
+                shadow-intensity="1.5"
+                shadow-softness="1"
+                exposure="1.2"
                 environment-image="neutral"
                 touch-action="pan-y">
                 <button slot="ar-button" class="ar-button">
