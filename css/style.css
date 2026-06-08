@@ -425,17 +425,13 @@ section { padding: 84px 0; }
   opacity: 0.95;
 }
 .thumb[data-kind="3d"]::after {
-  background: radial-gradient(circle at 42% 40%, rgba(255,255,255,0.98) 0 7%, transparent 8%),
-              linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%),
-              radial-gradient(circle at 60% 26%, rgba(201, 255, 113, 0.2), transparent 35%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%);
 }
 .thumb[data-kind="web"]::after {
-  background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 28%),
-              radial-gradient(circle at 30% 32%, rgba(201, 255, 113, 0.15), transparent 30%),
-              repeating-linear-gradient(0deg, transparent 0 12px, rgba(255,255,255,0.09) 12px 13px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%);
 }
 .thumb[data-kind="motion"]::after {
-  background: conic-gradient(from 220deg at 52% 48%, rgba(255,255,255,0.1), rgba(201, 255, 113, 0.8), rgba(255,255,255,0.1));
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%);
 }
 .project-body { padding: 16px; display: grid; gap: 10px; flex: 1; }
 .project-body h3 { margin: 0; font-size: 1.04rem; color: var(--text); }
