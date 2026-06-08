@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.dataset.search = `${data.titulo} ${data.descripcion} ${(data.tags || []).join(' ')}`.toLowerCase();
             
             card.innerHTML = `
-                <div class="thumb" style="background-image: url('${data.portadaUrl}'); background-size: cover; background-position: center;"></div>
+                <div class="thumb" data-kind="${data.categoria}" style="background-image: url('${data.portadaUrl}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-origin: content-box;"></div>
                 <div class="project-body">
                     <h3>${data.titulo}</h3>
                     <p>${data.descripcion}</p>

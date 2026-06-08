@@ -406,6 +406,7 @@ section { padding: 84px 0; }
   background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
   position: relative;
   overflow: hidden; /* Asegura que los pseudo-elementos no se salgan */
+  padding: 28px; /* Espacio extra para que la imagen quede dentro del marco blanco */
 }
 .thumb::before {
   content: "";
