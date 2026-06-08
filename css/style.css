@@ -473,6 +473,8 @@ section { padding: 84px 0; }
 .about-card h3 { color: var(--violet); }
 .about-card p { color: var(--muted); }
 .about-photo {
+  border-radius: 14px;
+  max-height: 340px;
   aspect-ratio: 3 / 4; /* Espacios para mayor compatibilidad */
   background: linear-gradient(135deg, #262626, var(--green-soft));
   display: grid; place-items: center; color: #fff; font-weight: 700;
