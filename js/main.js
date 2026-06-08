@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('article');
             card.className = 'project-card';
             card.dataset.category = data.categoria;
-            card.style.cursor = data.archivoUrl ? 'pointer' : 'default';
+            card.style.cursor = (data.archivoUrl || data.externalLink) ? 'pointer' : 'default';
             card.dataset.search = `${data.titulo} ${data.descripcion} ${(data.tags || []).join(' ')}`.toLowerCase();
             
             card.innerHTML = `
@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Si tiene archivo 3D, habilitar visor
             if (data.archivoUrl) {
                 card.addEventListener('click', () => openViewer(data.archivoUrl));
+            } else if (data.externalLink) {
+                card.addEventListener('click', () => window.open(data.externalLink, '_blank'));
             }
         });
 

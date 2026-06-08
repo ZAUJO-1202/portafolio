@@ -85,7 +85,17 @@
                 </div>
                     <div class="field"><label>Etiquetas</label><input type="text" id="pTags" placeholder="GLB, Blender, UI (separar por comas)"></div>
                     <div class="field"><label>Portada (Imagen)</label><input type="file" id="pThumb"></div>
-                    <div class="field"><label>Archivo 3D (Opcional .glb)</label><input type="file" id="pModel" accept=".glb"></div>
+                    
+                    <div class="field" style="flex-direction: row; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="isExternal" style="width: auto;">
+                        <label for="isExternal" style="margin: 0;">¿Es un enlace externo? (Web/Video)</label>
+                    </div>
+                    <div class="field" id="fileGroup"><label>Archivo 3D (.glb)</label><input type="file" id="pModel" accept=".glb"></div>
+                    <div class="field" id="linkGroup" style="display: none;">
+                        <label>Vínculo del recurso</label>
+                        <input type="url" id="pLink" placeholder="https://...">
+                    </div>
+
                     <button class="btn btn-primary" style="width: 100%;" onclick="addProject()">Publicar Proyecto</button>
                 </div>
             </div>
@@ -125,6 +135,12 @@
             return data.secure_url;
         }
 
+        // Toggle entre archivo y link
+        document.getElementById('isExternal').addEventListener('change', (e) => {
+            document.getElementById('fileGroup').style.display = e.target.checked ? 'none' : 'block';
+            document.getElementById('linkGroup').style.display = e.target.checked ? 'block' : 'none';
+        });
+
         // Auth Listener
         firebase.auth().onAuthStateChanged(user => {
             document.getElementById('loginForm').style.display = user ? 'none' : 'block';
@@ -161,6 +177,8 @@
         async function addProject() {
             const thumbFile = document.getElementById('pThumb').files[0];
             const modelFile = document.getElementById('pModel').files[0];
+            const isExternal = document.getElementById('isExternal').checked;
+            const linkUrl = document.getElementById('pLink').value.trim();
             const btn = document.querySelector('button[onclick="addProject()"]');
             
             if (!thumbFile) { alert("La imagen de portada es obligatoria"); return; }
@@ -171,8 +189,11 @@
             try {
                 const portadaUrl = await uploadToCloudinary(thumbFile);
                 let archivoUrl = "";
+                let externalLink = "";
                 
-                if (modelFile) {
+                if (isExternal) {
+                    externalLink = linkUrl;
+                } else if (modelFile) {
                     archivoUrl = await uploadToCloudinary(modelFile);
                 }
 
@@ -182,6 +203,7 @@
                     categoria: document.getElementById('pCat').value,
                     portadaUrl,
                     archivoUrl,
+                    externalLink,
                     fecha: firebase.firestore.FieldValue.serverTimestamp(),
                     tags: document.getElementById('pTags').value.split(',').map(t => t.trim()).filter(t => t !== "")
                 });
@@ -194,6 +216,10 @@
                 document.getElementById('pTags').value = '';
                 document.getElementById('pThumb').value = '';
                 document.getElementById('pModel').value = '';
+                document.getElementById('pLink').value = '';
+                document.getElementById('isExternal').checked = false;
+                document.getElementById('fileGroup').style.display = 'block';
+                document.getElementById('linkGroup').style.display = 'none';
             } catch (e) {
                 alert("Error: " + e.message);
             } finally {
