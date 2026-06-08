@@ -400,10 +400,10 @@ section { padding: 84px 0; }
   transition: transform 180ms ease;
   display: flex; flex-direction: column;
 }
-h3.project-card {
+.project-card h3 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
-  color: (var(--green));
+  color: var(--green);
 }
 .project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .thumb {
