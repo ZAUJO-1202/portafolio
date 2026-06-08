@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal3D = document.getElementById('modal3D');
     const modalContainer = document.getElementById('modalViewerContainer');
     const closeModal = document.getElementById('closeModal');
+    const screenshotBtn = document.getElementById('screenshotBtn');
 
     const openViewer = (modelUrl) => {
         modalContainer.innerHTML = `
@@ -50,6 +51,46 @@ document.addEventListener('DOMContentLoaded', () => {
         modal3D.classList.add('active');
         document.body.style.overflow = 'hidden';
     };
+
+    const takeScreenshot = async () => {
+        const viewer = modalContainer.querySelector('model-viewer');
+        if (!viewer) return;
+
+        // Captura el frame actual del visualizador
+        const blob = await viewer.toBlob({ idealAspect: true });
+        const url = URL.createObjectURL(blob);
+        
+        const img = new Image();
+        img.src = url;
+        await img.decode();
+
+        // Creamos un canvas para fusionar imagen + marca de agua
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+
+        // Dibujar el render 3D
+        ctx.drawImage(img, 0, 0);
+
+        // Dibujar la marca de agua (Logo)
+        const logo = new Image();
+        logo.src = 'assets/img/preloader.svg';
+        await logo.decode();
+
+        const logoW = canvas.width * 0.15; // 15% del ancho de la captura
+        const logoH = (logoW * logo.height) / logo.width;
+        ctx.globalAlpha = 0.5; // Transparencia para la marca de agua
+        ctx.drawImage(logo, canvas.width - logoW - 40, canvas.height - logoH - 40, logoW, logoH);
+
+        // Descargar la imagen resultante
+        const link = document.createElement('a');
+        link.download = `MauroRios_Render_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    };
+
+    screenshotBtn?.addEventListener('click', takeScreenshot);
 
     closeModal?.addEventListener('click', () => {
         modal3D.classList.remove('active');
