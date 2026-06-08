@@ -374,7 +374,6 @@ body.loading { overflow: hidden; }
 section { padding: 84px 0; }
 .section-head { margin-bottom: 28px; }
 .section-head h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.5rem); color: var(--green); letter-spacing: -0.04em; }
-.section-head h3 {color: var(--green);}
 .section-head p { color: var(--bg); max-width: 58ch; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
@@ -435,7 +434,7 @@ section { padding: 84px 0; }
   background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%);
 }
 .project-body { padding: 16px; display: grid; gap: 10px; flex: 1; }
-.project-body h3 { margin: 0; font-size: 1.04rem; color: var(--text); }
+.project-body h3 { margin: 0; font-size: 1.04rem; color: var(--green); }
 .project-body p { margin: 0; color: var(--bg); font-size: 0.95rem; }
 .project-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 
