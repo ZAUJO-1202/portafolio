@@ -448,7 +448,7 @@ section { padding: 84px 0; }
 }
 
 .project-card.is-expanded .project-info-wrapper {
-  max-height: 600px; /* Suficiente para mostrar todo el contenido */
+  max-height: 1920px; /* Suficiente para mostrar todo el contenido */
 }
 
 .btn-toggle-details {
