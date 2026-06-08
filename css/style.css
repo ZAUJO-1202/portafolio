@@ -374,6 +374,7 @@ body.loading { overflow: hidden; }
 section { padding: 84px 0; }
 .section-head { margin-bottom: 28px; }
 .section-head h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.5rem); color: var(--green); letter-spacing: -0.04em; }
+.section-head h3 {color: var(--green);}
 .section-head p { color: var(--bg); max-width: 58ch; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
@@ -399,11 +400,6 @@ section { padding: 84px 0; }
   box-shadow: var(--shadow-soft);
   transition: transform 180ms ease;
   display: flex; flex-direction: column;
-}
-.project-card h3 {
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight: 700;
-  color: var(--green);
 }
 .project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .thumb {
