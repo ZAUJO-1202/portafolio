@@ -468,7 +468,7 @@ section { padding: 84px 0; }
 .project-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 
 /* --- About & Skills --- */
-.about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 22px; align-items: stretch; }
+.about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 22px; align-items: start; }
 .about-card {
   background: var(--bg);
   color: var(--text);
@@ -481,6 +481,7 @@ section { padding: 84px 0; }
 .about-card:first-child {
   padding: 0;
   overflow: hidden; /* Ensure content respects border-radius and clips gradient */
+  height: 400px; /* Altura controlada para la tarjeta de la foto */
   min-height: 0; /* Prevent the image from pushing the height */
   isolation: isolate; /* Fix for some browsers clipping overflow */
 }
@@ -501,7 +502,10 @@ section { padding: 84px 0; }
   width: 100%;
   height: 100%;
   object-fit: cover; /* Fill the container, cropping if necessary */
+  filter: grayscale(100%);
+  transition: filter 0.5s ease;
 }
+.about-card:first-child:hover img { filter: grayscale(0%); }
 .skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .skill { 
   padding: 14px; text-align: center; 
