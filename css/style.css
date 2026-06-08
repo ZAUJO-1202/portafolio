@@ -497,3 +497,60 @@ footer { padding: 24px 0 42px; color: var(--muted); text-align: center; }
   .hero h1 { font-size: 2.8rem; }
   .skills { grid-template-columns: 1fr; }
 }
+
+/* --- Modal 3D --- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+.modal.active { display: grid; }
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(23, 23, 23, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.modal-content {
+  position: relative;
+  width: min(100%, 1000px);
+  height: min(100%, 700px);
+  background: var(--violet);
+  border-radius: 32px;
+  border: 1px solid rgba(201, 255, 113, 0.2);
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+}
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  z-index: 10;
+  background: var(--green);
+  border: 0; width: 40px; height: 40px; border-radius: 50%;
+  cursor: pointer; font-weight: bold;
+}
+model-viewer { width: 100%; height: 100%; --poster-color: transparent; position: relative; }
+
+/* --- Botón AR --- */
+.ar-button {
+  background: var(--green);
+  border-radius: 14px;
+  border: none;
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  font-weight: 700;
+  color: var(--violet);
+  box-shadow: 0 8px 25px rgba(201, 255, 113, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  z-index: 20;
+}

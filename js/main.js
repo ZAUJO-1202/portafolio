@@ -28,6 +28,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectsGrid = document.getElementById('projectsGrid');
     const heroContainer = document.getElementById('heroVisualContainer');
 
+    // --- Lógica del Modal 3D ---
+    const modal3D = document.getElementById('modal3D');
+    const modalContainer = document.getElementById('modalViewerContainer');
+    const closeModal = document.getElementById('closeModal');
+
+    const openViewer = (modelUrl) => {
+        modalContainer.innerHTML = `
+            <model-viewer src="${modelUrl}"
+                ar ar-modes="webxr scene-viewer quick-look"
+                camera-controls auto-rotate
+                shadow-intensity="1"
+                environment-image="neutral"
+                touch-action="pan-y">
+                <button slot="ar-button" class="ar-button">
+                    <span>Ver en tu espacio (RA) 📱</span>
+                </button>
+            </model-viewer>`;
+        modal3D.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    closeModal?.addEventListener('click', () => {
+        modal3D.classList.remove('active');
+        modalContainer.innerHTML = '';
+        document.body.style.overflow = 'auto';
+    });
+
     // --- Cargar Imagen de Hero ---
     db.collection('configuracion').doc('hero').get().then((doc) => {
         if (doc.exists && doc.data().url) {
@@ -47,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('article');
             card.className = 'project-card';
             card.dataset.category = data.categoria;
+            card.style.cursor = data.archivoUrl ? 'pointer' : 'default';
             card.dataset.search = `${data.titulo} ${data.descripcion} ${(data.tags || []).join(' ')}`.toLowerCase();
             
             card.innerHTML = `
@@ -59,6 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>`;
             projectsGrid.appendChild(card);
+
+            // Si tiene archivo 3D, habilitar visor
+            if (data.archivoUrl) {
+                card.addEventListener('click', () => openViewer(data.archivoUrl));
+            }
         });
 
         if (snapshot.empty) {
