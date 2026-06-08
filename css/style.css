@@ -468,7 +468,7 @@ section { padding: 84px 0; }
 .project-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 
 /* --- About & Skills --- */
-.about-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 22px; grid-auto-rows: 1fr; }
+.about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 22px; align-items: stretch; }
 .about-card {
   background: var(--bg);
   color: var(--text);
@@ -477,11 +477,12 @@ section { padding: 84px 0; }
   border: 1px solid var(--border);
   display: flex; /* Make about-card a flex container */
   flex-direction: column; /* Stack its content vertically */
-  height: 100%; /* Ensure it stretches to grid row height */
 }
 .about-card:first-child {
   padding: 0;
   overflow: hidden; /* Ensure content respects border-radius and clips gradient */
+  min-height: 0; /* Prevent the image from pushing the height */
+  isolation: isolate; /* Fix for some browsers clipping overflow */
 }
 .about-card:not(:first-child) { /* Apply padding to the text card */
   padding: 24px;
@@ -500,7 +501,6 @@ section { padding: 84px 0; }
   width: 100%;
   height: 100%;
   object-fit: cover; /* Fill the container, cropping if necessary */
-  border-radius: 28px; /* Apply border-radius to the image itself, matching the card */
 }
 .skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .skill { 
