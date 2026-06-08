@@ -489,16 +489,16 @@ section { padding: 84px 0; }
 .about-card h3 { color: var(--violet); margin-top: 0; } /* Added margin-top: 0 for consistency */
 .about-card p { color: var(--muted); }
 .about-photo { /* This is the container for the image and gradient */
-  width: 100%;
-  height: 100%; /* Fill the height of its parent about-card */
+  width: 75%;
+  height: 75%; /* Fill the height of its parent about-card */
   background: linear-gradient(135deg, #262626, var(--green-soft)); /* Gradient background */
   display: flex; /* Use flex to center the image if needed, though img fills it */
   align-items: center;
   justify-content: center;
 }
 .about-photo img {
-  width: 75%;
-  height: 75%;
+  width: 100%;
+  height: 100%;
   object-fit: cover; /* Fill the container, cropping if necessary */
   border-radius: 28px; /* Apply border-radius to the image itself, matching the card */
 }
