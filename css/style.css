@@ -390,7 +390,7 @@ section { padding: 84px 0; }
 }
 .chip.is-active { background: linear-gradient(135deg, var(--violet), var(--green)); color: #fff; border-color: transparent; }
 
-.projects-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.projects-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: start; }
 .project-card {
   background: var(--violet);
   border: 1px solid var(--bg);
@@ -434,8 +434,37 @@ section { padding: 84px 0; }
   background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 55%);
 }
 .project-body { padding: 16px; display: grid; gap: 10px; flex: 1; }
-.project-body h3 { margin: 0; font-size: 1.04rem; color: var(--green); }
+.project-body h3 { margin: 0; font-size: 1.04rem; color: var(--green); margin-bottom: 5px; }
 .project-body p { margin: 0; color: var(--bg); font-size: 0.95rem; }
+
+/* --- Contenedor expandible --- */
+.project-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 44px; /* Muestra aproximadamente 2 líneas de texto */
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card.is-expanded .project-info-wrapper {
+  max-height: 600px; /* Suficiente para mostrar todo el contenido */
+}
+
+.btn-toggle-details {
+  background: none;
+  border: none;
+  color: var(--green);
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 5px 0 0 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+.btn-toggle-details:hover { text-decoration: underline; }
 .project-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 
 /* --- About & Skills --- */

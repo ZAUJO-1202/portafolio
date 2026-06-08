@@ -124,10 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="thumb" data-kind="${data.categoria}" style="background-image: url('${data.portadaUrl}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-origin: content-box;"></div>
                 <div class="project-body">
                     <h3>${data.titulo}</h3>
-                    <p>${data.descripcion}</p>
-                    <div class="project-footer">
-                        ${(data.tags || []).filter(tag => tag.trim() !== "").map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                    <div class="project-info-wrapper">
+                        <p>${data.descripcion}</p>
+                        <div class="project-footer">
+                            ${(data.tags || []).filter(tag => tag.trim() !== "").map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        </div>
                     </div>
+                    <button class="btn-toggle-details">Ver más</button>
                 </div>`;
             projectsGrid.appendChild(card);
 
@@ -137,6 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (data.externalLink) {
                 card.addEventListener('click', () => window.open(data.externalLink, '_blank'));
             }
+
+            // Manejo del botón "Ver más / Ver menos"
+            const toggleBtn = card.querySelector('.btn-toggle-details');
+            toggleBtn?.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita abrir el visor/link al expandir
+                card.classList.toggle('is-expanded');
+                toggleBtn.textContent = card.classList.contains('is-expanded') ? 'Ver menos' : 'Ver más';
+            });
         });
 
         if (snapshot.empty) {
