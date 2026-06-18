@@ -19,14 +19,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
+    <!-- Quill Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
     <style>
         body { background-color: var(--bg); color: var(--text); }
         .admin-header { background: var(--violet); color: #fff; padding: 20px 0; margin-bottom: 40px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 20px; }
+        .full-width { grid-column: 1 / -1; }
+        #editor-container { background: #fff; height: 300px; border-radius: 0 0 16px 16px; border: 1px solid var(--border); color: #000; }
+        .ql-toolbar { background: #f3f3f3; border-radius: 16px 16px 0 0; border: 1px solid var(--border) !important; }
         #loginForm { max-width: 450px; margin: 80px auto; }
         #adminContent { display: none; }
         @media (max-width: 860px) { .admin-grid { grid-template-columns: 1fr; } }
@@ -68,6 +76,28 @@
                         <input type="file" id="heroFile" accept="image/png">
                     </div>
                     <button class="btn btn-primary" onclick="uploadHero()">Actualizar Hero</button>
+                </div>
+
+                <!-- Nueva Experiencia -->
+                <div class="contact-card full-width">
+                    <h3>Nueva Experiencia / Logro</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px;">Redacta tus resultados laborales o académicos con formato enriquecido (imágenes, enlaces, negritas).</p>
+                    <div class="field"><label>Título de la experiencia</label><input type="text" id="eTitle" placeholder="Ej: Prácticas en Empresa X - Logros 2026"></div>
+                    <div class="field"><label>Contenido</label><div id="editor-container"></div></div>
+                    <br>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="addExperience()">Publicar Experiencia</button>
+                </div>
+
+                <!-- Nuevo Certificado -->
+                <div class="contact-card">
+                    <h3>Nuevo Certificado</h3>
+                    <div class="field"><label>Nombre del Certificado</label><input type="text" id="cName" placeholder="Ej: Especialista en Blender"></div>
+                    <div class="field"><label>Fecha de Expedición</label><input type="date" id="cDate"></div>
+                    <div class="field">
+                        <label>Archivo PDF</label>
+                        <input type="file" id="cFile" accept=".pdf">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="addCertificate()">Subir Certificado</button>
                 </div>
 
                 <!-- Nuevo Proyecto -->
@@ -114,26 +144,67 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Inicializar Quill
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: 'Escribe aquí tu experiencia...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['link', 'image', 'video'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+
         // Configuración Cloudinary
-        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbzqbh5wv/auto/upload";
+        const CLOUDINARY_BASE_URL = "https://api.cloudinary.com/v1_1/dbzqbh5wv";
         const CLOUDINARY_PRESET = "portafolio_preset";
 
         // Función auxiliar para subir a Cloudinary
-        async function uploadToCloudinary(file) {
+        async function uploadToCloudinary(file, resourceType = 'auto') {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_PRESET);
 
-            const response = await fetch(CLOUDINARY_URL, {
+            const url = `${CLOUDINARY_BASE_URL}/${resourceType}/upload`;
+            const response = await fetch(url, {
                 method: 'POST',
                 body: formData
             });
 
-            if (!response.ok) throw new Error('Error al subir a Cloudinary');
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Detalle del error en Cloudinary:', errorData);
+                throw new Error(errorData.error?.message || 'Error desconocido al subir a Cloudinary');
+            }
             
             const data = await response.json();
             return data.secure_url;
         }
+
+        // Handler para imágenes en Quill: Sube a Cloudinary antes de insertar el link
+        quill.getModule('toolbar').addHandler('image', () => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+
+            input.onchange = async () => {
+                const file = input.files[0];
+                if (file) {
+                    try {
+                        const url = await uploadToCloudinary(file);
+                        const range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', url);
+                    } catch (e) {
+                        alert("Error al subir imagen: " + e.message);
+                    }
+                }
+            };
+        });
 
         // Toggle entre archivo y link
         document.getElementById('isExternal').addEventListener('change', (e) => {
@@ -194,7 +265,7 @@
                 if (isExternal) {
                     externalLink = linkUrl;
                 } else if (modelFile) {
-                    archivoUrl = await uploadToCloudinary(modelFile);
+                    archivoUrl = await uploadToCloudinary(modelFile, 'raw');
                 }
 
                 await db.collection('proyectos').add({
@@ -225,6 +296,82 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = "Publicar Proyecto";
+            }
+        }
+
+        async function addExperience() {
+            const title = document.getElementById('eTitle').value.trim();
+            const content = quill.root.innerHTML;
+            const btn = document.querySelector('button[onclick="addExperience()"]');
+
+            if (!title || quill.getText().trim().length === 0) {
+                alert("Completa el título y el contenido");
+                return;
+            }
+
+            // Validar el tamaño del contenido (Límite de Firestore es ~1MB)
+            const sizeInBytes = new Blob([content]).size;
+            if (sizeInBytes > 1048000) {
+                if (content.includes('data:image/')) {
+                    alert("¡Error! El contenido es demasiado pesado. Esto sucede porque has PEGADO imágenes directamente. Por favor, elimínalas y usa el ícono de imagen de la barra de herramientas para que se suban a Cloudinary.");
+                } else {
+                    alert("¡Error! El contenido supera el límite de 1MB de la base de datos. Reduce la cantidad de texto o imágenes.");
+                }
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Publicando...";
+
+            try {
+                await db.collection('experiencias').add({
+                    titulo: title,
+                    contenido: content,
+                    fecha: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Experiencia publicada con éxito");
+                document.getElementById('eTitle').value = '';
+                quill.setContents([]);
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Publicar Experiencia";
+            }
+        }
+
+        async function addCertificate() {
+            const nombre = document.getElementById('cName').value.trim();
+            const fechaInput = document.getElementById('cDate').value;
+            const file = document.getElementById('cFile').files[0];
+            const btn = document.querySelector('button[onclick="addCertificate()"]');
+
+            if (!nombre || !fechaInput || !file) { alert("Todos los campos son obligatorios"); return; }
+
+            btn.disabled = true;
+            btn.textContent = "Subiendo...";
+
+            try {
+                // Convertimos el valor YYYY-MM-DD a un objeto Date local para que Firebase lo guarde como Timestamp
+                const parts = fechaInput.split('-');
+                const fechaExpedicion = new Date(parts[0], parts[1] - 1, parts[2]);
+
+                const pdfUrl = await uploadToCloudinary(file, 'auto');
+                await db.collection('certificados').add({
+                    nombre,
+                    fechaExpedicion: fechaExpedicion,
+                    pdfUrl,
+                    fechaRegistro: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Certificado añadido con éxito");
+                document.getElementById('cName').value = '';
+                document.getElementById('cDate').value = '';
+                document.getElementById('cFile').value = '';
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Subir Certificado";
             }
         }
     </script>

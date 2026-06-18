@@ -108,12 +108,21 @@ body.loading { overflow: hidden; }
 .topbar {
   position: sticky;
   top: 0;
+  width: 100%;
+  left: 0;
   z-index: 1000;
   -webkit-backdrop-filter: blur(18px); /* Para compatibilidad con Safari y Chrome antiguos */
   backdrop-filter: blur(18px);
   background: rgba(249, 250, 251, 0.72);
   border-bottom: 1px solid rgba(60, 21, 59, 0.08);
 }
+
+.topbar .container {
+  max-width: 100%; /* Rompe el límite de los 1240px */
+  width: 100%;
+  padding: 0 40px; /* Espaciado lateral para que el logo no pegue al borde */
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -467,6 +476,67 @@ section { padding: 84px 0; }
 .btn-toggle-details:hover { text-decoration: underline; }
 .project-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 
+/* --- Experiencias --- */
+.experiences-container { display: flex; flex-direction: column; gap: 24px; }
+.experience-card {
+  background: var(--bg);
+  color: var(--text);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+.experience-card h3 { color: var(--violet); margin-top: 0; font-size: 1.5rem; margin-bottom: 12px; }
+.experience-content { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+
+/* Estilos para contenido HTML del editor (Rich Text) */
+.experience-content p { margin-bottom: 1em; }
+.experience-content strong, .experience-content b { color: var(--text); font-weight: 700; }
+.experience-content a { color: var(--violet); text-decoration: underline; font-weight: 700; }
+.experience-content ul, .experience-content ol { margin-left: 20px; margin-bottom: 1em; }
+.experience-content li { margin-bottom: 0.5em; }
+.experience-content img { 
+  max-width: 100%; 
+  height: auto; 
+  border-radius: var(--radius-sm); 
+  margin: 15px 0; 
+  display: block; 
+}
+.experience-content iframe { width: 100%; aspect-ratio: 16/9; border-radius: var(--radius-sm); border: none; margin: 15px 0; }
+
+.experience-date {
+  display: block;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* --- Certificados --- */
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.certificate-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.certificate-card:hover { transform: translateY(-4px); border-color: var(--green); }
+.certificate-card h4 { margin: 0; color: var(--violet); font-size: 1.1rem; }
+.certificate-card span { font-size: 0.85rem; color: var(--muted); font-weight: 700; }
+
+.pdf-modal-content { width: min(95%, 1200px) !important; height: 90vh !important; }
+
 /* --- About & Skills --- */
 .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 22px; align-items: start; }
 .about-card {
@@ -585,7 +655,7 @@ footer { padding: 24px 0 42px; color: var(--muted); text-align: center; }
 }
 .modal-close {
   position: absolute;
-  top: 20px; right: 20px;
+  top: 60px; right: 20px;
   z-index: 10;
   background: var(--green);
   border: 0; width: 40px; height: 40px; border-radius: 50%;

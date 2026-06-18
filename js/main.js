@@ -155,6 +155,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- Cargar Experiencias ---
+    const loadExperiences = async () => {
+        const grid = document.getElementById('experiencesGrid');
+        if (!grid) return;
+
+        const snapshot = await db.collection('experiencias').orderBy('fecha', 'desc').get();
+        grid.innerHTML = '';
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const card = document.createElement('article');
+            card.className = 'experience-card';
+            
+            const dateStr = data.fecha ? new Date(data.fecha.toDate()).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : '';
+
+            card.innerHTML = `
+                <h3>${data.titulo}</h3>
+                <div class="experience-content">
+                    ${data.contenido}
+                </div>
+                <span class="experience-date">${dateStr}</span>
+            `;
+            grid.appendChild(card);
+        });
+
+        if (snapshot.empty) {
+            grid.innerHTML = '<p style="text-align: center; opacity: 0.5;">No hay experiencias publicadas aún.</p>';
+        }
+    };
+
+    // --- Lógica de Certificados ---
+    const modalPDF = document.getElementById('modalPDF');
+    const pdfContainer = document.getElementById('pdfViewerContainer');
+    const closePDF = document.getElementById('closePDF');
+
+    const openPDF = (pdfUrl) => {
+        // Los navegadores modernos manejan PDF nativamente. Cargarlo directamente es más confiable que usar proxies externos.
+        pdfContainer.innerHTML = `<iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>`;
+        modalPDF.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    closePDF?.addEventListener('click', () => {
+        modalPDF.classList.remove('active');
+        pdfContainer.innerHTML = '';
+        document.body.style.overflow = 'auto';
+    });
+
+    const loadCertificates = async () => {
+        const grid = document.getElementById('certificatesGrid');
+        if (!grid) return;
+        const snapshot = await db.collection('certificados').orderBy('fechaExpedicion', 'desc').get();
+        grid.innerHTML = '';
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+
+            // Formatear la fecha: Maneja tanto el formato anterior (string) como el nuevo (Timestamp)
+            let displayDate = data.fechaExpedicion;
+            if (data.fechaExpedicion && typeof data.fechaExpedicion.toDate === 'function') {
+                const d = data.fechaExpedicion.toDate();
+                const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+                const day = d.getDate().toString().padStart(2, '0');
+                displayDate = `${day}/${meses[d.getMonth()]}/${d.getFullYear()}`;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'certificate-card';
+            card.innerHTML = `
+                <span>${displayDate}</span>
+                <h4>${data.nombre}</h4>
+                <p style="font-size: 0.8rem; margin:0; opacity: 0.7;">Ver certificado ↗</p>
+            `;
+            card.onclick = () => openPDF(data.pdfUrl);
+            grid.appendChild(card);
+        });
+    };
+
     // --- Navegación Móvil ---
     menuBtn?.addEventListener('click', () => {
         nav.classList.toggle('mobile-open');
@@ -197,6 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar carga
     loadProjects();
+    loadExperiences();
+    loadCertificates();
 
     // Evitar que el form de búsqueda refresque la página
     document.querySelector('.search')?.addEventListener('submit', (e) => e.preventDefault());
