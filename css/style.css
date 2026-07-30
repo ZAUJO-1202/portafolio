@@ -1,7 +1,7 @@
 /* =============================================
-   PORTAFOLIO 2026 - Mauro Rios
-   Bowlby One + Outfit | #2DCDFF #171717 #FFFFFF
-   ============================================= */
+  PORTAFOLIO 2026 - Mauro Rios
+  Bowlby One + Outfit | #2DCDFF #171717 #FFFFFF
+  ============================================= */
 :root {
   --cyan: #2DCDFF; --dark: #171717; --white: #FFFFFF;
   --cyan-dim: rgba(45,205,255,0.15); --cyan-glow: rgba(45,205,255,0.3);
@@ -243,9 +243,9 @@ ul { list-style: none; }
 
 /* Skills */
 .skills-title {
-  font-family: var(--font-display) !important;
-  font-size: clamp(0.85rem,1.8vw,1rem) !important;
-  color: var(--cyan) !important; margin-bottom: 16px !important;
+  font-family: var(--font-body) !important;
+  font-size: clamp(1rem,2.2vw,1.3rem) !important;
+  color: var(--white) !important; margin-bottom: 16px !important;
 }
 .skills-list { display: grid; gap: 10px; }
 .skills-list li {
