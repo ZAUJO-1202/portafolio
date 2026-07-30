@@ -1,10 +1,9 @@
 /**
- * Lógica del Portafolio Multimedia
- * Conexión con Firebase para contenido dinámico.
+ * PORTAFOLIO 2026 - Mauro Rios
+ * Bowlby One + Outfit | #2DCDFF, #171717, #FFFFFF
+ * About Slider, Carrusel Infinito, Firebase, GLB Viewer, Snap Nav
  */
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyDXxGKVMkytpiyclCvuZv0I3BWigPS4haY",
     authDomain: "proyectos-fb5f4.firebaseapp.com",
@@ -20,296 +19,395 @@ const db = firebase.firestore();
 const analytics = firebase.analytics ? firebase.analytics() : null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const menuBtn = document.getElementById('menuBtn');
-    const nav = document.getElementById('nav');
-    const filters = document.getElementById('filters');
-    const searchInput = document.getElementById('searchInput');
-    const contactForm = document.getElementById('contactForm');
-    const projectsGrid = document.getElementById('projectsGrid');
-    const heroContainer = document.getElementById('heroVisualContainer');
-
-    // --- Lógica del Modal 3D ---
+    // === DOM ELEMENTS ===
+    const preloader = document.getElementById('preloader');
+    const hamburger = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    const navbarLinks = document.querySelectorAll('.nav-link');
+    const aboutSlider = document.getElementById('aboutSlider');
+    const carouselTrack = document.getElementById('carouselTrack');
+    const carouselDots = document.getElementById('carouselDots');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    const certGrid = document.getElementById('certGrid');
+    const certCount = document.getElementById('certCount');
+    const modalPDF = document.getElementById('modalPDF');
+    const pdfContainer = document.getElementById('pdfViewerContainer');
+    const closePDF = document.getElementById('closePDF');
     const modal3D = document.getElementById('modal3D');
-    const modalContainer = document.getElementById('modalViewerContainer');
-    const closeModal = document.getElementById('closeModal');
-    const screenshotBtn = document.getElementById('screenshotBtn');
+    const modalViewerContainer = document.getElementById('modalViewerContainer');
+    const closeModal3D = document.getElementById('closeModal3D');
+    const floatingBtns = document.querySelectorAll('.nav-floating-btn');
 
-    const openViewer = (modelUrl) => {
-        modalContainer.innerHTML = `
+    // =============================================
+    // PRELOADER
+    // =============================================
+    window.addEventListener('load', () => {
+        setTimeout(() => preloader?.classList.add('hidden'), 500);
+    });
+    if (document.readyState === 'complete') preloader?.classList.add('hidden');
+
+    // =============================================
+    // MOBILE MENU
+    // =============================================
+    hamburger?.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks?.classList.toggle('open');
+    });
+    navbarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger?.classList.remove('active');
+            navLinks?.classList.remove('open');
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth > 860) return;
+        const nav = document.getElementById('navbar');
+        if (nav && !nav.contains(e.target)) {
+            hamburger?.classList.remove('active');
+            navLinks?.classList.remove('open');
+        }
+    });
+
+    // =============================================
+    // FLOATING NAV & ACTIVE SECTION DETECTION
+    // =============================================
+    const sections = ['hero', 'acerca', 'proyectos', 'contacto'];
+    let currentSection = 'hero';
+    let isSnapping = false;
+
+    const scrollToSection = (id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            isSnapping = true;
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => { isSnapping = false; }, 800);
+        }
+    };
+
+    floatingBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            scrollToSection(btn.dataset.target);
+        });
+    });
+
+    const updateActiveStates = () => {
+        if (isSnapping) return;
+        let current = 'hero';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= 100) current = id;
+            }
+        });
+        if (current !== currentSection) {
+            currentSection = current;
+            navbarLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+            });
+            floatingBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.target === current);
+            });
+        }
+    };
+
+    window.addEventListener('scroll', updateActiveStates);
+    updateActiveStates();
+
+    // =============================================
+    // ABOUT SLIDER
+    // =============================================
+    let currentSlide = 0;
+    const totalSlides = document.querySelectorAll('.about-slide').length;
+
+    const goToSlide = (index) => {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentSlide = index;
+        document.querySelectorAll('.about-slide').forEach((slide, i) => {
+            slide.classList.toggle('active', i === currentSlide);
+        });
+        const counter = document.querySelector('.about-slide.active .about-counter');
+        if (counter) counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+    };
+
+    aboutSlider?.addEventListener('click', (e) => {
+        const prev = e.target.closest('.about-prev');
+        const next = e.target.closest('.about-next');
+        if (prev) {
+            const slide = prev.closest('.about-slide');
+            if (slide) goToSlide(parseInt(slide.dataset.index) - 1);
+        }
+        if (next) {
+            const slide = next.closest('.about-slide');
+            if (slide) goToSlide(parseInt(slide.dataset.index) + 1);
+        }
+    });
+
+    // =============================================
+    // GLB VIEWER MODAL
+    // =============================================
+    const openGLBViewer = (modelUrl) => {
+        if (!modalViewerContainer || !modal3D) return;
+        modalViewerContainer.innerHTML = `
             <model-viewer src="${modelUrl}"
                 ar ar-modes="webxr scene-viewer quick-look"
                 camera-controls auto-rotate
-                shadow-intensity="1.5"
-                shadow-softness="1"
-                exposure="1.2"
-                environment-image="neutral"
+                shadow-intensity="1.5" shadow-softness="1"
+                exposure="1.2" environment-image="neutral"
                 touch-action="pan-y">
-                <button slot="ar-button" class="ar-button">
-                    <span>Ver en tu espacio (RA) 📱</span>
+                <button slot="ar-button" class="ar-button" style="background:var(--cyan);border-radius:14px;border:none;position:absolute;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;font-weight:700;color:var(--dark);box-shadow:0 8px 25px rgba(45,205,255,0.4);display:flex;align-items:center;gap:10px;cursor:pointer;z-index:20;font-family:Outfit,sans-serif;">
+                    <span>Ver en RA 📱</span>
                 </button>
             </model-viewer>`;
         modal3D.classList.add('active');
         document.body.style.overflow = 'hidden';
     };
 
-    const takeScreenshot = async () => {
-        const viewer = modalContainer.querySelector('model-viewer');
-        if (!viewer) return;
-
-        // Captura el frame actual del visualizador
-        const blob = await viewer.toBlob({ idealAspect: true });
-        const url = URL.createObjectURL(blob);
-        
-        const img = new Image();
-        img.src = url;
-        await img.decode();
-
-        // Creamos un canvas para fusionar imagen + marca de agua
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-
-        // Dibujar el render 3D
-        ctx.drawImage(img, 0, 0);
-
-        // Dibujar la marca de agua (Logo)
-        const logo = new Image();
-        logo.src = 'assets/img/preloader.svg';
-        await logo.decode();
-
-        const logoW = canvas.width * 0.15; // 15% del ancho de la captura
-        const logoH = (logoW * logo.height) / logo.width;
-        ctx.globalAlpha = 0.5; // Transparencia para la marca de agua
-        ctx.drawImage(logo, canvas.width - logoW - 40, canvas.height - logoH - 40, logoW, logoH);
-
-        // Descargar la imagen resultante
-        const link = document.createElement('a');
-        link.download = `MauroRios_Render_${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    };
-
-    screenshotBtn?.addEventListener('click', takeScreenshot);
-
-    closeModal?.addEventListener('click', () => {
-        modal3D.classList.remove('active');
-        modalContainer.innerHTML = '';
+    closeModal3D?.addEventListener('click', () => {
+        modal3D?.classList.remove('active');
+        if (modalViewerContainer) modalViewerContainer.innerHTML = '';
         document.body.style.overflow = 'auto';
     });
-
-    // --- Cargar Imagen de Hero ---
-    db.collection('configuracion').doc('hero').get().then((doc) => {
-        if (doc.exists && doc.data().url) {
-            heroContainer.innerHTML = `<img src="${doc.data().url}" alt="Portafolio web profesional de Mauro Rios con enfoque en 3D y frontend" style="max-width:100%; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));">`;
-        } else {
-            console.log("Aviso: No se encontró el documento 'configuracion/hero' o no tiene URL.");
-        }
+    modal3D?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) closeModal3D?.click();
     });
 
-    // --- Cargar Proyectos desde Firebase ---
-    const loadProjects = async () => {
-        const snapshot = await db.collection('proyectos').orderBy('fecha', 'desc').get();
-        projectsGrid.innerHTML = ''; // Limpiar grid
+    // =============================================
+    // PROJECTS CAROUSEL (Infinite)
+    // =============================================
+    let projects = [];
+    let currentProjectIdx = 0;
+    let isTransitioning = false;
+
+    const truncateText = (text, maxLen = 120) => {
+        if (!text || text.length <= maxLen) return { short: text, full: text, needsTrunc: false };
+        return { short: text.substring(0, maxLen) + '...', full: text, needsTrunc: true };
+    };
+
+    const createProjectCard = (data, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
         
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            const card = document.createElement('article');
-            card.className = 'project-card';
-            card.dataset.category = data.categoria;
-            card.style.cursor = (data.archivoUrl || data.externalLink) ? 'pointer' : 'default';
-            card.dataset.search = `${data.titulo} ${data.descripcion} ${(data.tags || []).join(' ')}`.toLowerCase();
-            
-            card.innerHTML = `
-                <div class="thumb" data-kind="${data.categoria}" style="background-image: url('${data.portadaUrl}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-origin: content-box;"></div>
-                <div class="project-body">
-                    <h3>${data.titulo}</h3>
-                    <div class="project-info-wrapper">
-                        <p>${data.descripcion}</p>
-                        <div class="project-footer">
-                            ${(data.tags || []).filter(tag => tag.trim() !== "").map(tag => `<span class="project-tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                    <button class="btn-toggle-details">Ver más</button>
+        const subtitle = data.entidad || data.categoria || '';
+        const tags = (data.tags || []).filter(t => t.trim() !== '');
+        const tagsHTML = tags.map(t => `<span>${t}</span>`).join('');
+        const hasGLB = !!data.archivoUrl;
+        const desc = data.descripcion || '';
+        const { short, full, needsTrunc } = truncateText(desc);
+        
+        let descHTML = '';
+        if (needsTrunc) {
+            descHTML = `
+                <div class="project-desc-wrap">
+                    <p class="project-desc">${short}</p>
+                    <p class="project-desc-full">${full}</p>
+                    <button class="read-more-btn" data-expanded="false">...leer más</button>
                 </div>`;
-            projectsGrid.appendChild(card);
-
-            // Si tiene archivo 3D, habilitar visor
-            if (data.archivoUrl) {
-                card.addEventListener('click', () => openViewer(data.archivoUrl));
-            } else if (data.externalLink) {
-                card.addEventListener('click', () => window.open(data.externalLink, '_blank'));
-            }
-
-            // Manejo del botón "Ver más / Ver menos"
-            const toggleBtn = card.querySelector('.btn-toggle-details');
-            toggleBtn?.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita abrir el visor/link al expandir
-                card.classList.toggle('is-expanded');
-                toggleBtn.textContent = card.classList.contains('is-expanded') ? 'Ver menos' : 'Ver más';
-            });
-        });
-
-        if (snapshot.empty) {
-            projectsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.5;">No hay proyectos publicados aún.</p>';
+        } else {
+            descHTML = `<p class="project-desc">${desc}</p>`;
         }
-    };
-
-    // --- Cargar Experiencias ---
-    const loadExperiences = async () => {
-        const grid = document.getElementById('experiencesGrid');
-        if (!grid) return;
-
-        const snapshot = await db.collection('experiencias').orderBy('fecha', 'desc').get();
-        grid.innerHTML = '';
-
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            const card = document.createElement('article');
-            card.className = 'experience-card';
-            
-            const dateStr = data.fecha ? new Date(data.fecha.toDate()).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : '';
-
-            card.innerHTML = `
-                <h3>${data.titulo}</h3>
-                <div class="experience-content">
-                    ${data.contenido}
+        
+        slide.innerHTML = `
+            <div class="project-card" data-index="${index}">
+                <div class="project-card-thumb">
+                    ${data.portadaUrl 
+                        ? `<img src="${data.portadaUrl}" alt="${data.titulo}" loading="lazy" />`
+                        : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#222);display:flex;align-items:center;justify-content:center;color:rgba(45,205,255,0.15);font-size:2rem;">◆</div>`
+                    }
                 </div>
-                <span class="experience-date">${dateStr}</span>
-            `;
-            grid.appendChild(card);
+                <div class="project-card-body">
+                    <h3>${data.titulo}</h3>
+                    ${subtitle ? `<p class="project-subtitle">${subtitle}</p>` : ''}
+                    ${descHTML}
+                    ${tagsHTML ? `<div class="project-card-tags">${tagsHTML}</div>` : ''}
+                    ${hasGLB ? `<div class="project-card-tags" style="margin-top:8px;"><span style="background:rgba(45,205,255,0.15);">🔮 Ver modelo 3D</span></div>` : ''}
+                </div>
+            </div>
+        `;
+
+        // "leer más" toggle
+        const readMoreBtn = slide.querySelector('.read-more-btn');
+        const descWrap = slide.querySelector('.project-desc-wrap');
+        if (readMoreBtn && descWrap) {
+            readMoreBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const expanded = readMoreBtn.dataset.expanded === 'true';
+                readMoreBtn.dataset.expanded = expanded ? 'false' : 'true';
+                descWrap.classList.toggle('project-desc-expanded', !expanded);
+                readMoreBtn.textContent = expanded ? '...leer más' : '...ver menos';
+            });
+        }
+
+        // Click handler for GLB viewer or link
+        const card = slide.querySelector('.project-card');
+        card?.addEventListener('click', (e) => {
+            // Don't trigger if clicking on read-more button
+            if (e.target.closest('.read-more-btn')) return;
+            if (data.archivoUrl) {
+                openGLBViewer(data.archivoUrl);
+            } else if (data.externalLink) {
+                window.open(data.externalLink, '_blank', 'noopener,noreferrer');
+            }
         });
 
-        if (snapshot.empty) {
-            grid.innerHTML = '<p style="text-align: center; opacity: 0.5;">No hay experiencias publicadas aún.</p>';
+        return slide;
+    };
+
+    const renderCarousel = () => {
+        if (!carouselTrack) return;
+        carouselTrack.innerHTML = '';
+        if (projects.length === 0) {
+            carouselTrack.innerHTML = `
+                <div class="carousel-slide">
+                    <div class="project-card" style="text-align:center;padding:60px 40px;min-height:200px;display:flex;align-items:center;justify-content:center;">
+                        <p style="color:rgba(255,255,255,0.3);font-size:1.1rem;">No hay proyectos publicados aún.</p>
+                    </div>
+                </div>`;
+            return;
+        }
+        projects.forEach((project, i) => carouselTrack.appendChild(createProjectCard(project, i)));
+        carouselDots.innerHTML = '';
+        projects.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = `carousel-dot ${i === currentProjectIdx ? 'active' : ''}`;
+            dot.setAttribute('aria-label', `Proyecto ${i + 1}`);
+            dot.addEventListener('click', () => goToProject(i));
+            carouselDots.appendChild(dot);
+        });
+        updateCarouselPosition();
+    };
+
+    const updateCarouselPosition = () => {
+        if (!carouselTrack || projects.length === 0) return;
+        carouselTrack.style.transform = `translateX(${-currentProjectIdx * 100}%)`;
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentProjectIdx);
+        });
+    };
+
+    const goToProject = (index) => {
+        if (isTransitioning || projects.length === 0) return;
+        isTransitioning = true;
+        if (index < 0) index = projects.length - 1;
+        if (index >= projects.length) index = 0;
+        currentProjectIdx = index;
+        updateCarouselPosition();
+        setTimeout(() => { isTransitioning = false; }, 500);
+    };
+
+    prevBtn?.addEventListener('click', () => goToProject(currentProjectIdx - 1));
+    nextBtn?.addEventListener('click', () => goToProject(currentProjectIdx + 1));
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goToProject(currentProjectIdx - 1);
+        if (e.key === 'ArrowRight') goToProject(currentProjectIdx + 1);
+    });
+
+    let touchStartX = 0, touchEndX = 0;
+    carouselTrack?.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    carouselTrack?.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) goToProject(currentProjectIdx + 1);
+            else goToProject(currentProjectIdx - 1);
+        }
+    }, { passive: true });
+
+    // =============================================
+    // LOAD PROJECTS FROM FIREBASE
+    // =============================================
+    const loadProjects = async () => {
+        try {
+            const snapshot = await db.collection('proyectos').orderBy('fecha', 'desc').get();
+            projects = [];
+            snapshot.forEach(doc => projects.push(doc.data()));
+            renderCarousel();
+        } catch (err) {
+            console.error('Error loading projects:', err);
+            if (carouselTrack) {
+                carouselTrack.innerHTML = `
+                    <div class="carousel-slide">
+                        <div class="project-card" style="text-align:center;padding:60px 40px;min-height:200px;display:flex;align-items:center;justify-content:center;">
+                            <p style="color:rgba(255,255,255,0.3);">Error al cargar proyectos.</p>
+                        </div>
+                    </div>`;
+            }
         }
     };
 
-    // --- Lógica de Certificados ---
-    const modalPDF = document.getElementById('modalPDF');
-    const pdfContainer = document.getElementById('pdfViewerContainer');
-    const closePDF = document.getElementById('closePDF');
+    // =============================================
+    // LOAD CERTIFICATES FROM FIREBASE (con contador)
+    // =============================================
+    const loadCertificates = async () => {
+        if (!certGrid) return;
+        try {
+            const snapshot = await db.collection('certificados').orderBy('fechaExpedicion', 'desc').get();
+            certGrid.innerHTML = '';
+            
+            // Actualizar contador dinámico
+            const total = snapshot.size;
+            if (certCount) certCount.textContent = total;
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                let displayDate = data.fechaExpedicion;
+                if (data.fechaExpedicion && typeof data.fechaExpedicion.toDate === 'function') {
+                    const d = data.fechaExpedicion.toDate();
+                    const meses = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
+                    displayDate = `${d.getDate()}/${meses[d.getMonth()]}/${d.getFullYear()}`;
+                }
+                const item = document.createElement('div');
+                item.className = 'cert-item';
+                item.innerHTML = `<h4>${data.nombre}</h4><span>${displayDate}</span><span class="cert-view">Ver certificado ↗</span>`;
+                item.addEventListener('click', () => openPDF(data.pdfUrl));
+                certGrid.appendChild(item);
+            });
+            if (snapshot.empty) {
+                certGrid.innerHTML = '<p style="color:rgba(255,255,255,0.3);text-align:center;grid-column:1/-1;">No hay certificados disponibles.</p>';
+            }
+        } catch (err) {
+            console.error('Error loading certificates:', err);
+        }
+    };
 
+    // =============================================
+    // PDF MODAL
+    // =============================================
     const openPDF = (pdfUrl) => {
-        // Los navegadores modernos manejan PDF nativamente. Cargarlo directamente es más confiable que usar proxies externos.
-        pdfContainer.innerHTML = `<iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>`;
+        if (!pdfContainer || !modalPDF) return;
+        pdfContainer.innerHTML = `<iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;" title="Visor PDF"></iframe>`;
         modalPDF.classList.add('active');
         document.body.style.overflow = 'hidden';
     };
 
     closePDF?.addEventListener('click', () => {
-        modalPDF.classList.remove('active');
-        pdfContainer.innerHTML = '';
+        modalPDF?.classList.remove('active');
+        if (pdfContainer) pdfContainer.innerHTML = '';
         document.body.style.overflow = 'auto';
     });
-
-    const loadCertificates = async () => {
-        const grid = document.getElementById('certificatesGrid');
-        if (!grid) return;
-        const snapshot = await db.collection('certificados').orderBy('fechaExpedicion', 'desc').get();
-        grid.innerHTML = '';
-
-        snapshot.forEach(doc => {
-            const data = doc.data();
-
-            // Formatear la fecha: Maneja tanto el formato anterior (string) como el nuevo (Timestamp)
-            let displayDate = data.fechaExpedicion;
-            if (data.fechaExpedicion && typeof data.fechaExpedicion.toDate === 'function') {
-                const d = data.fechaExpedicion.toDate();
-                const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
-                const day = d.getDate().toString().padStart(2, '0');
-                displayDate = `${day}/${meses[d.getMonth()]}/${d.getFullYear()}`;
-            }
-
-            const card = document.createElement('div');
-            card.className = 'certificate-card';
-            card.innerHTML = `
-                <span>${displayDate}</span>
-                <h4>${data.nombre}</h4>
-                <p style="font-size: 0.8rem; margin:0; opacity: 0.7;">Ver certificado ↗</p>
-            `;
-            card.onclick = () => openPDF(data.pdfUrl);
-            grid.appendChild(card);
-        });
-    };
-
-    // --- Navegación Móvil ---
-    menuBtn?.addEventListener('click', () => {
-        nav.classList.toggle('mobile-open');
-        menuBtn.textContent = nav.classList.contains('mobile-open') ? '✕' : '☰';
-    });
-
-    // Cerrar menú al hacer click fuera
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth > 860) return;
-        if (!nav.contains(e.target)) {
-        nav.classList.remove('mobile-open');
-        menuBtn.textContent = '☰';
+    modalPDF?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+            modalPDF.classList.remove('active');
+            if (pdfContainer) pdfContainer.innerHTML = '';
+            document.body.style.overflow = 'auto';
         }
     });
 
-    // --- Filtros y Búsqueda ---
-    const updateProjects = () => {
-        const activeFilter = document.querySelector('.chip.is-active')?.dataset.filter ?? 'all';
-        const query = searchInput.value.trim().toLowerCase();
-        const cards = document.querySelectorAll('.project-card');
-
-        cards.forEach((card) => {
-        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
-        const matchesSearch = !query || card.dataset.search.toLowerCase().includes(query);
-        
-        card.style.display = matchesFilter && matchesSearch ? 'flex' : 'none';
-        });
-    };
-
-    filters?.addEventListener('click', (e) => {
-        const btn = e.target.closest('.chip');
-        if (!btn) return;
-
-        document.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        updateProjects();
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (modalPDF?.classList.contains('active')) closePDF?.click();
+            if (modal3D?.classList.contains('active')) closeModal3D?.click();
+        }
     });
 
-    searchInput?.addEventListener('input', updateProjects);
-
-    // Inicializar carga
+    // =============================================
+    // INIT
+    // =============================================
     loadProjects();
-    loadExperiences();
     loadCertificates();
-
-    // Evitar que el form de búsqueda refresque la página
-    document.querySelector('.search')?.addEventListener('submit', (e) => e.preventDefault());
-
-    // --- Formulario de Contacto ---
-    contactForm?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value.trim();
-        const message = document.getElementById('message').value.trim();
-        
-        // Generamos los caracteres especiales y emojis mediante sus códigos únicos (Unicode/CodePoint)
-        // Esto evita que el archivo se rompa si no está guardado en UTF-8.
-        const saludo = "\u00A1Hola!"; 
-        const emojiMano = String.fromCodePoint(0x1F44B); // 👋
-        const text = `${saludo} ${emojiMano} Soy ${name}\n${message}`;
-        
-        // Codificar el mensaje para la URL
-        const encodedText = encodeURIComponent(text);
-        
-        // Usamos api.whatsapp.com, que tiene una gestión de caracteres más robusta que wa.me
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=573168666075&text=${encodedText}`;
-        
-        // Usamos location.href para una mejor experiencia en dispositivos móviles
-        window.location.href = whatsappUrl;
-    });
-
-    // --- Manejo del Preloader ---
-    window.addEventListener('load', () => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.classList.add('hidden');
-            document.body.classList.remove('loading');
-        }
-    });
 });

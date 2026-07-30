@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" prefix="og: https://ogp.me/ns#">
-    <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Explora el portafolio de Mauro Rios, Ingeniero Multimedia especializado en modelado 3D lowpoly, diseño gráfico digital y desarrollo web frontend. Soluciones visuales creativas y optimizadas.">
-    <meta name="keywords" content="Mauro Rios, Portafolio, Ingeniería Multimedia, Modelado 3D, Lowpoly, Desarrollo Web, Frontend, Firebase, Cloudinary, Diseño Gráfico, UI UX">
+    <meta name="description" content="Explora el portafolio de Mauro Rios, Ingeniero Multimedia especializado en modelado 3D lowpoly, diseño gráfico digital y desarrollo web frontend.">
+    <meta name="keywords" content="Mauro Rios, Portafolio, Ingeniería Multimedia, Modelado 3D, Lowpoly, Desarrollo Web, Frontend, Firebase, Cloudinary, Diseño Gráfico, UI UX, Blender, Multimedia, 3D">
     <meta name="author" content="Mauro Leandro Rios Churta">
     <meta name="theme-color" content="#171717">
     <link rel="canonical" href="https://zaujo-1202.github.io/portafolio/" />
@@ -15,7 +15,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
     <link rel="shortcut icon" href="assets/img/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Mauro Rios | Portafolio" />
+    <meta name="apple-mobile-web-app-title" content="Portafolio" />
     <link rel="manifest" href="assets/img/site.webmanifest" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
@@ -33,17 +33,16 @@
     <meta name="twitter:description" content="Ingeniería Multimedia, Modelado 3D y Desarrollo Frontend.">
     <meta name="twitter:image" content="https://zaujo-1202.github.io/portafolio/assets/img/logo.svg">
 
-    <!-- Google Fonts: Josefin Sans -->
+    <!-- Google Fonts: Bowlby One + Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Estilos externos -->
+    <!-- Estilos -->
     <link rel="stylesheet" href="css/style.css" />
-    <!-- Scripts externos (defer para optimizar carga) -->
     <script src="js/main.js" defer></script>
 
-    <!-- Soporte para Modelos 3D -->
+    <!-- Model Viewer para GLB -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <!-- Firebase SDKs -->
@@ -52,248 +51,262 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+</head>
+<body>
 
-    </head>
-    <body class="loading">
-
-    <!-- Pantalla de Carga -->
+    <!-- ============================================ -->
+    <!-- PRELOADER -->
+    <!-- ============================================ -->
     <div id="preloader">
         <div class="preloader-logo-wrapper">
-            <img src="assets/img/preloader.svg" alt="Cargando..." class="preloader-logo">
+            <img src="assets/img/logo.svg" alt="Cargando..." class="preloader-logo">
         </div>
     </div>
 
-    <header class="topbar">
-        <div class="container">
-        <nav class="nav" id="nav">
-            <a class="brand" href="#inicio" aria-label="Ir al inicio">
-            <img src="assets/img/logo.svg" alt="Logo Mauro Rios" class="brand-mark">
-            <span>Mauro Rios | Portafolio</span>
-            </a>
-
-            <div class="nav-links" aria-label="Navegación principal">
-            <a href="#inicio">Inicio</a>
-            <a href="#sobre-mi">Sobre mí</a>
-            <a href="#servicios">Servicios</a>
-            <a href="#proyectos">Proyectos</a>
-            <a href="#experiencias">Experiencias</a>
-            <a href="#certificados">Certificados</a>
-            <a href="#contacto">Contacto</a>
+    <!-- ============================================ -->
+    <!-- NAVEGACIÓN -->
+    <!-- ============================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-links" id="navLinks">
+                <a href="#hero" class="nav-link active">INICIO</a>
+                <a href="#acerca" class="nav-link">ACERCA DE MI</a>
+                <a href="#proyectos" class="nav-link">PROYECTOS</a>
+                <a href="#contacto" class="nav-link">CONTÁCTAME</a>
             </div>
-
-            <div class="nav-actions">
-            <form class="search" role="search" aria-label="Buscar proyectos">
-                <input type="search" id="searchInput" placeholder="Buscar proyectos, habilidades..." aria-label="Buscar proyectos, habilidades" />
-                <button type="submit" aria-label="Buscar">⌕</button>
-            </form>
-            <a class="btn btn-secondary" href="#proyectos">Ver trabajos</a>
-            <button class="hamburger" id="menuBtn" aria-label="Abrir menú">☰</button>
-            </div>
-        </nav>
+            <button class="hamburger" id="menuBtn" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-    </header>
+    </nav>
 
-    <main id="contenido">
-        <section class="hero" id="inicio">
-        <div class="container">
-            <div class="hero-panel">
-            <div class="hero-grid">
-                <div>
-                <div class="eyebrow">Diseño 3D, desarrollo web y soluciones visuales</div>
-                <h1>Transformo ideas en <span>experiencias</span></h1>
-                <p class="subtitle">
-                    Soy Mauro Rios, profesional en formación en Ingeniería Multimedia, especializado en modelado 3D, diseño gráfico digital y desarrollo web frontend. Trabajo con modelado lowpoly y tecnologías modernas para construir proyectos visuales funcionales y rápidos.
-                </p>
-                <div class="hero-cta">
-                    <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
-                    <a class="btn btn-secondary" href="#contacto">Contactarme</a>
-                </div>
+    <!-- ============================================ -->
+    <!-- BOTONES FLOTANTES DE NAVEGACIÓN -->
+    <!-- ============================================ -->
+    <div class="nav-floating" id="navFloating">
+        <button class="nav-floating-btn" data-target="hero" aria-label="Ir a Inicio">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+        </button>
+        <button class="nav-floating-btn" data-target="acerca" aria-label="Ir a Acerca de mí">
+            <span>1</span>
+        </button>
+        <button class="nav-floating-btn" data-target="proyectos" aria-label="Ir a Proyectos">
+            <span>2</span>
+        </button>
+        <button class="nav-floating-btn" data-target="contacto" aria-label="Ir a Contacto">
+            <span>3</span>
+        </button>
+    </div>
 
-                <div class="stats" aria-label="Resumen profesional">
-                    <div class="stat"><strong>+10</strong><span>proyectos completados</span></div>
-                    <div class="stat"><strong>7</strong><span>años de experiencia</span></div>
-                    <div class="stat"><strong>6</strong><span>herramientas dominadas</span></div>
-                    <div class="stat"><strong>100%</strong><span>compromiso y creatividad</span></div>
-                </div>
-                </div>
-
-                <div class="visual" aria-hidden="true">
-                <div class="viz-stage">
-                    <div id="heroVisualContainer"></div>
-                </div>
-                </div>
-            </div>
-            </div>
+    <!-- ============================================ -->
+    <!-- SECCIÓN 1: PORTADA / HERO -->
+    <!-- ============================================ -->
+    <section class="section hero snap-section" id="hero">
+        <div class="hero-bg-shapes">
+            <div class="hero-shape hero-shape-1"></div>
+            <div class="hero-shape hero-shape-2"></div>
+            <div class="hero-shape hero-shape-3"></div>
         </div>
-        </section>
-
-        <section id="servicios">
-        <div class="container">
-            <div class="section-head">
-                <h2>Servicios</h2>
-                <p>Soluciones visuales y técnicas para destacar en el entorno digital.</p>
+        <div class="hero-content">
+            <div class="hero-badge">MULTIMEDIA</div>
+            <div class="hero-tags">
+                <span>MODELADO 3D</span>
+                <span>DISEÑO UI/UX</span>
+                <span>DISEÑO GRÁFICO</span>
             </div>
-
-            <div class="skills" id="skillsGrid">
-                <div class="skill">Modelado 3D<small>Optimización, limpieza topológica y estilo lowpoly para videojuegos y piezas digitales.</small></div>
-                <div class="skill">Diseño gráfico digital<small>Piezas vectoriales e ilustraciones con una identidad clara, coherente y profesional.</small></div>
-                <div class="skill">Desarrollo web frontend<small>Portafolios responsivos con HTML, CSS y JS, listos para GitHub Pages, Firebase y Cloudinary.</small></div>
-                <div class="skill">Optimización y despliegue<small>Estructura ordenada con Docker y Nginx para una experiencia web estable.</small></div>
-            </div>
+            <h1 class="hero-title">PORTAFOLIO</h1>
+            <p class="hero-name">MAURO LEANDRO RIOS CHURTA</p>
+            <p class="hero-year">2026</p>
         </div>
-        </section>
+    </section>
 
-        <section id="habilidades" style="padding-top: 0;">
-            <div class="container">
-                <div class="section-head">
-                    <h2>Habilidades</h2>
-                    <p>Combino creatividad, técnica y organización para construir proyectos visuales y digitales con alto valor estético y funcional.</p>
+    <!-- ============================================ -->
+    <!-- SECCIÓN 2: ACERCA DE MÍ -->
+    <!-- ============================================ -->
+    <section class="section about snap-section" id="acerca">
+        <div class="about-slider" id="aboutSlider">
+            <!-- Slide 1: Biography -->
+            <div class="about-slide active" data-index="0">
+                <div class="about-container">
+                    <h2 class="section-title">ACERCA DE MI:</h2>
+                    <div class="about-content">
+                        <p>Soy Mauro Leandro Rios Churta, profesional en formación en el área de ingeniería multimedia con 7 años de experiencia en diseño gráfico, 3 años en diseño y modelado 3D optimizado para recursos interactivos.</p>
+                        <p>Tengo capacidad para generar resultados, trabajar en equipo, además, me adapto con fluidez a nuevas herramientas, aprendizajes y metodologías.</p>
+                    </div>
+                    <div class="about-nav about-nav-bottom">
+                        <button class="about-arrow about-prev" aria-label="Anterior">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <span class="about-counter">1 / 3</span>
+                        <button class="about-arrow about-next" aria-label="Siguiente">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="chips">
-                    <span class="project-tag">Modelado 3D</span>
-                    <span class="project-tag">Diseño lowpoly</span>
-                    <span class="project-tag">Diseño gráfico digital</span>
-                    <span class="project-tag">Ilustración vectorial</span>
-                    <span class="project-tag">Animación 3D básica</span>
-                    <span class="project-tag">HTML, CSS y JavaScript</span>
-                    <span class="project-tag">GitHub Pages</span>
-                    <span class="project-tag">Firebase</span>
-                    <span class="project-tag">Cloudinary</span>
-                    <span class="project-tag">Docker y Nginx</span>
-                    <span class="project-tag">Prompts para IA</span>
-                    <span class="project-tag">Resolución de problemas</span>
+            </div>
+
+            <!-- Slide 2: Certificates -->
+            <div class="about-slide" data-index="1">
+                <div class="about-container">
+                    <h2 class="section-title">ACERCA DE MI:</h2>
+                    <div class="about-content">
+                        <div class="about-cert-info">
+                            <p class="cert-count">Certificados: <strong id="certCount">0</strong></p>
+                        </div>
+                        <div class="cert-scroll">
+                            <div class="cert-grid" id="certGrid">
+                                <!-- Certificates loaded from Firebase -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-nav about-nav-bottom">
+                        <button class="about-arrow about-prev" aria-label="Anterior">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <span class="about-counter">2 / 3</span>
+                        <button class="about-arrow about-next" aria-label="Siguiente">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <section id="proyectos">
-        <div class="container">
-            <div class="section-head">
-            <div>
-                <h2>Proyectos destacados</h2>
-                <p>Incluye categorías listas para filtrar y una presentación ideal para mostrar modelados GLB, motion graphics, identidad visual y sitios web.</p>
-            </div>
-            </div>
-
-            <div class="chips" id="filters">
-            <button class="chip is-active" data-filter="all">Todos</button>
-            <button class="chip" data-filter="3d">Modelado 3D</button>
-            <button class="chip" data-filter="web">Diseño web</button>
-            <button class="chip" data-filter="motion">Motion graphics</button>
-            <button class="chip" data-filter="branding">Branding</button>
-            </div>
-
-            <div class="projects-grid" id="projectsGrid">
-                <!-- Las tarjetas se cargarán dinámicamente desde Firebase -->
-            </div>
-        </div>
-        </section>
-
-        <section id="experiencias">
-            <div class="container">
-                <div class="section-head">
-                    <h2>Experiencias y Resultados</h2>
-                    <p>Un recorrido por mi trayectoria profesional, logros alcanzados y aprendizajes clave en entornos laborales y académicos.</p>
+            <!-- Slide 3: Skills -->
+            <div class="about-slide" data-index="2">
+                <div class="about-container">
+                    <h2 class="section-title">ACERCA DE MI:</h2>
+                    <div class="about-content">
+                        <p class="skills-title">Habilidades y conocimientos:</p>
+                        <ul class="skills-list">
+                            <li>✦ Orientación y atención al cliente.</li>
+                            <li>✦ Adaptabilidad a software.</li>
+                            <li>✦ Redacción de Prompts para IA.</li>
+                            <li>✦ Diseño gráfico Digital.</li>
+                            <li>✦ Modelado y animación 3D.</li>
+                            <li>✦ Texturizado con UVs y materiales PBR.</li>
+                            <li>✦ Diseño UI/UX.</li>
+                            <li>✦ Resolución de problemas.</li>
+                            <li>✦ Realidad aumentada, realidad Virtual y videojuegos.</li>
+                        </ul>
+                    </div>
+                    <div class="about-nav about-nav-bottom">
+                        <button class="about-arrow about-prev" aria-label="Anterior">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <span class="about-counter">3 / 3</span>
+                        <button class="about-arrow about-next" aria-label="Siguiente">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
                 </div>
-                <div id="experiencesGrid" class="experiences-container"></div>
-            </div>
-        </section>
-
-        <section id="certificados">
-            <div class="container">
-                <div class="section-head">
-                    <h2>Certificaciones</h2>
-                    <p>Documentos que avalan mi formación técnica y académica en diversas áreas de la ingeniería y el diseño.</p>
-                </div>
-                <div id="certificatesGrid" class="certificates-grid"></div>
-            </div>
-        </section>
-
-        <section id="sobre-mi">
-        <div class="container">
-            <div class="section-head">
-            <div>
-                <h2>Sobre mí</h2>
-                <p>Aquí puedes observar un resumen de mi perfil profesional y descargar mi Hoja de Vida en formato PDF.</p>
-            </div>
-            </div>
-
-            <div class="about-grid">
-            <div class="about-card">
-                <div class="about-photo"><img src="assets/img/foto.png" alt="Foto de Mauro Rios"></div>
-            </div>
-            <div class="about-card about-copy">
-                <h3>Mauro Rios</h3>
-                <p>
-                    Soy un profesional en formación en Ingeniería Multimedia con experiencia en diseño gráfico vectorial, modelado 3D para videojuegos, animación e impresión. Mi fortaleza está en crear soluciones visuales limpias, funcionales y bien optimizadas, con especial interés en el modelado lowpoly y la construcción de portafolios web modernos.
-                </p>
-                <p>
-                    También integro conocimientos de desarrollo web frontend y herramientas como Docker, Nginx, GitHub Pages, Firebase y Cloudinary para crear proyectos escalables, organizados y fáciles de mantener. Me caracterizo por la adaptabilidad y la resolución de problemas.
-                </p>
-                <a class="btn btn-primary" href="assets/pdf/CVM_MauroRios_140126.pdf" download="CVM_MauroRios_140126.pdf">Descargar CV</a>
-            </div>
             </div>
         </div>
-        </section>
+    </section>
 
-        <section id="contacto">
-        <div class="container">
-            <div class="section-head">
-            <div>
-                <h2>¿Necesitas una pieza 3D o un portafolio visual que realmente destaque?</h2>
-                <p>Estoy listo para convertir tu idea en una propuesta visual atractiva, funcional y bien optimizada. Si buscas modelado 3D, diseño multimedia o una web personal con presencia profesional, aquí empieza el proyecto.</p>
-            </div>
+    <!-- ============================================ -->
+    <!-- SECCIÓN 3: PROYECTOS (CARRUSEL INFINITO) -->
+    <!-- ============================================ -->
+    <section class="section projects snap-section" id="proyectos">
+        <div class="projects-header">
+            <h2 class="section-title">PROYECTOS</h2>
+            <p class="projects-subtitle">Aquí puedes echarles un vistazo a mis proyectos más destacados.</p>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Projects loaded dynamically from Firebase -->
             </div>
 
-            <div class="contact-grid">
-            <div class="contact-card">
-                <h3>Hablemos de tu proyecto</h3>
-                <p>Envía tu nombre y un mensaje para iniciar una conversación directa vía WhatsApp.</p>
-                <p>[Más métodos de contacto proximamente...]</p>
-                <form id="contactForm">
-                <div class="field">
-                    <label for="name">Nombre</label>
-                    <input id="name" name="name" type="text" placeholder="Tu nombre" required />
-                </div>
-                <div class="field">
-                    <label for="message">Mensaje</label>
-                    <textarea id="message" name="message" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
-                </div>
-                <button class="btn btn-primary" type="submit" style="gap: 12px;">
-                    Enviar mensaje <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.009c.109.004.258-.045.406.314.156.38.533 1.297.581 1.393.048.097.08.21.016.339-.063.13-.099.21-.197.321-.097.111-.206.247-.294.331-.097.092-.198.192-.085.384.113.192.502.828 1.08 1.341.741.66 1.365.865 1.557.962.192.096.303.08.416-.048.113-.129.484-.564.614-.756.13-.191.259-.161.439-.097.18.064 1.13.534 1.325.631.194.097.325.145.372.225.047.08.047.465-.097.87zM12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+            <div class="carousel-nav">
+                <button class="carousel-btn carousel-prev" aria-label="Anterior">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
-                </form>
-            </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots generated dynamically -->
+                </div>
+                <button class="carousel-btn carousel-next" aria-label="Siguiente">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
         </div>
-        </section>
-    </main>
+    </section>
 
-    <!-- Modal Visor 3D -->
-    <div id="modal3D" class="modal" aria-hidden="true">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close" id="closeModal" aria-label="Cerrar visor">✕</button>
-            <div id="modalViewerContainer"></div>
-            <img src="assets/img/preloader.svg" class="viewer-watermark" alt="Watermark">
-            <button id="screenshotBtn" class="screenshot-button">📸 Capturar</button>
+    <!-- ============================================ -->
+    <!-- SECCIÓN 4: CONTÁCTAME + FOOTER -->
+    <!-- ============================================ -->
+    <section class="section contact snap-section" id="contacto">
+        <h2 class="section-title contact-title">CONTÁCTAME</h2>
+        <div class="contact-options">
+            <!-- PERSONAL -->
+            <div class="contact-card">
+                <div class="contact-card-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M20 21a8 8 0 10-16 0"/>
+                    </svg>
+                </div>
+                <span class="contact-card-label">PERSONAL</span>
+                <div class="contact-card-btns">
+                    <a href="https://api.whatsapp.com/send?phone=573168666075&text=%C2%A1%C2%A1%C2%A1Holaaaaa!!!%20%F0%9F%91%8B%0AQuiero%20saber%20m%C3%A1s%20sobre%20tus%20servicios.%0AGracias." target="_blank" rel="noopener noreferrer" class="contact-btn">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.009c.109.004.258-.045.406.314.156.38.533 1.297.581 1.393.048.097.08.21.016.339-.063.13-.099.21-.197.321-.097.111-.206.247-.294.331-.097.092-.198.192-.085.384.113.192.502.828 1.08 1.341.741.66 1.365.865 1.557.962.192.096.303.08.416-.048.113-.129.484-.564.614-.756.13-.191.259-.161.439-.097.18.064 1.13.534 1.325.631.194.097.325.145.372.225.047.08.047.465-.097.87zM12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="mailto:maurorios2022.1512@gmail.com?subject=Solicitud%20de%20informaci%C3%B3n&body=%C2%A1%C2%A1%C2%A1Holaaaaa!!!%20%F0%9F%91%8B%0AQuiero%20saber%20m%C3%A1s%20sobre%20tus%20servicios.%0AGracias." target="_blank" rel="noopener noreferrer" class="contact-btn">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <span>Email</span>
+                    </a>
+                </div>
+            </div>
+            <!-- FUSION 3 STUDIO -->
+            <div class="contact-card">
+                <div class="contact-card-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+                        <path d="M12 12v.01"/>
+                    </svg>
+                </div>
+                <span class="contact-card-label">FUSION 3 STUDIO</span>
+                <div class="contact-card-btns">
+                    <a href="https://api.whatsapp.com/send?phone=573244976943&text=%C2%A1%C2%A1%C2%A1Holaaaaa!!!%20%F0%9F%91%8B%0AQuiero%20saber%20m%C3%A1s%20sobre%20sus%20servicios.%0AGracias." target="_blank" rel="noopener noreferrer" class="contact-btn">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.009c.109.004.258-.045.406.314.156.38.533 1.297.581 1.393.048.097.08.21.016.339-.063.13-.099.21-.197.321-.097.111-.206.247-.294.331-.097.092-.198.192-.085.384.113.192.502.828 1.08 1.341.741.66 1.365.865 1.557.962.192.096.303.08.416-.048.113-.129.484-.564.614-.756.13-.191.259-.161.439-.097.18.064 1.13.534 1.325.631.194.097.325.145.372.225.047.08.047.465-.097.87zM12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://www.facebook.com/share/1TBm1uxpiH/" target="_blank" rel="noopener noreferrer" class="contact-btn">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/fusion_3_studio?igsh=Zjd3c2RheHhwOWI1" target="_blank" rel="noopener noreferrer" class="contact-btn">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        <span>Instagram</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="contact-footer">
+            <div class="footer-line"></div>
+            <p>Portafolio multimedia Mauro Rios · HTML, CSS y JS · 2026</p>
+        </div>
+    </section>
 
-    <!-- Modal PDF -->
+    <!-- Modal PDF para certificados -->
     <div id="modalPDF" class="modal" aria-hidden="true">
         <div class="modal-overlay"></div>
         <div class="modal-content pdf-modal-content">
             <button class="modal-close" id="closePDF">✕</button>
-            <div id="pdfViewerContainer" style="width: 100%; height: 100%;"></div>
+            <div id="pdfViewerContainer"></div>
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-        <div class="footer-line"></div>
-        <div>Portafolio multimedia Mauro Rios · HTML, CSS y JS ·</div>
+    <!-- Modal 3D para visor GLB -->
+    <div id="modal3D" class="modal" aria-hidden="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal3D">✕</button>
+            <div id="modalViewerContainer"></div>
         </div>
-    </footer>
+    </div>
 </body>
 </html>

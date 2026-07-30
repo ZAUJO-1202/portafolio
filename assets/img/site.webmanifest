@@ -1,5 +1,5 @@
 {
-  "name": "Mauro Rios | Portafolio",
+  "name": "Portafolio",
   "short_name": "Portafolio",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#efede3",
+  "theme_color": "#2DCDFF",
   "background_color": "#171717",
   "display": "standalone"
 }
